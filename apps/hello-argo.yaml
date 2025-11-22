@@ -1,1 +1,23 @@
-
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-argo
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # URL to Repo 1 (Where the chart and code live)
+    repoURL: https://github.com/Dzana-K/hello-argo.git
+    targetRevision: main
+    path: charts/hello-argo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
